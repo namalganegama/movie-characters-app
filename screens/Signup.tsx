@@ -5,7 +5,8 @@ import {
 } from 'react-native';
 import { initializeAuth, createUserWithEmailAndPassword, getReactNativePersistence } from '@firebase/auth';
 import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage';
-import { app } from "../config"
+import { doc, setDoc } from "firebase/firestore";
+import { app, db } from "../config"
 
 interface Errors {
 	name?: string;
@@ -74,9 +75,21 @@ const Signup = ({ navigation }: { navigation: any }) => {
 		}
 	};
 
+	const createUser = () => {
+		setDoc(doc(db, "users", "user"), {
+			name: name,
+			email: email,
+		}).then(() => {
+			console.log("Data saved");
+		}).catch((error) => {
+			console.log(error);
+		});
+	}
+
 	const handleSubmit = () => {
 		if (isFormValid) {
 			handleAuthentication();
+			createUser();
 		} else {
 			console.log('Form has errors. Please correct them.');
 		}
