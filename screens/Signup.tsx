@@ -3,10 +3,9 @@ import {
 	View, TextInput, TouchableOpacity,
 	Text, StyleSheet
 } from 'react-native';
-import { initializeAuth, createUserWithEmailAndPassword, getReactNativePersistence } from '@firebase/auth';
-import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage';
-import { doc, setDoc } from "firebase/firestore";
-import { app, db } from "../config"
+import { createUserWithEmailAndPassword } from '@firebase/auth';;
+import { collection, addDoc } from "firebase/firestore";
+import { db, auth } from "../config"
 
 interface Errors {
 	name?: string;
@@ -63,33 +62,23 @@ const Signup = ({ navigation }: { navigation: any }) => {
 	};
 
 	const handleAuthentication = async () => {
-		const auth = initializeAuth(app, {
-			persistence: getReactNativePersistence(ReactNativeAsyncStorage)
-		})
+		
 		try {
 			const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-			console.log('User registered email:', userCredential.user.email);
+			const docRef = await addDoc(collection(db, "users"), {
+				name: name,
+				email: email,
+			})
+			console.log('User registered email:', userCredential.user.email, docRef.id);
 			navigation.navigate('login');
 		} catch (error) {
 			console.error('Error registering user:', error);
 		}
 	};
 
-	const createUser = () => {
-		setDoc(doc(db, "users", "user"), {
-			name: name,
-			email: email,
-		}).then(() => {
-			console.log("Data saved");
-		}).catch((error) => {
-			console.log(error);
-		});
-	}
-
 	const handleSubmit = () => {
 		if (isFormValid) {
 			handleAuthentication();
-			createUser();
 		} else {
 			console.log('Form has errors. Please correct them.');
 		}
