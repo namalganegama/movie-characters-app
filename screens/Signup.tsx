@@ -1,9 +1,11 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
 	View, TextInput, TouchableOpacity,
 	Text, StyleSheet
 } from 'react-native';
-import { Linking } from 'react-native';
+import { initializeAuth, createUserWithEmailAndPassword, getReactNativePersistence } from '@firebase/auth';
+import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage';
+import { app } from "../config"
 
 interface Errors {
 	name?: string;
@@ -59,9 +61,22 @@ const Signup = ({ navigation }: { navigation: any }) => {
 		setIsFormValid(Object.keys(errors).length === 0);
 	};
 
+	const handleAuthentication = async () => {
+		const auth = initializeAuth(app, {
+			persistence: getReactNativePersistence(ReactNativeAsyncStorage)
+		})
+		try {
+			const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+			console.log('User registered email:', userCredential.user.email);
+			navigation.navigate('login');
+		} catch (error) {
+			console.error('Error registering user:', error);
+		}
+	};
+
 	const handleSubmit = () => {
 		if (isFormValid) {
-			console.log('Form submitted successfully!');
+			handleAuthentication();
 		} else {
 			console.log('Form has errors. Please correct them.');
 		}
@@ -133,7 +148,7 @@ const Signup = ({ navigation }: { navigation: any }) => {
 			</TouchableOpacity>
 
 			<Text style={styles.bottomText}>
-				Have an account? 
+				Have an account?
 				&nbsp;
 				<Text style={{ color: '#FFD482' }} onPress={() => navigation.navigate('login')}>
 					Sign In
