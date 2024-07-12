@@ -3,6 +3,7 @@ import {
 	View, TextInput, TouchableOpacity,
 	Text, StyleSheet
 } from 'react-native';
+import { Linking } from 'react-native';
 
 interface Errors {
 	name?: string;
@@ -11,7 +12,7 @@ interface Errors {
 	confirmPassword?: string;
 }
 
-const Signup = () => {
+const Signup = ({ navigation }: { navigation: any }) => {
 	const [name, setName] = useState('');
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
@@ -131,7 +132,13 @@ const Signup = () => {
 				<Text style={styles.buttonText}>Sign Up</Text>
 			</TouchableOpacity>
 
-			<Text style={styles.bottomText}>Have an account? Sign In</Text>
+			<Text style={styles.bottomText}>
+				Have an account? 
+				&nbsp;
+				<Text style={{ color: '#FFD482' }} onPress={() => navigation.navigate('login')}>
+					Sign In
+				</Text>
+			</Text>
 		</View>
 	);
 };
