@@ -3,9 +3,9 @@ import {
 	View, TextInput, TouchableOpacity,
 	Text, StyleSheet
 } from 'react-native';
-import { createUserWithEmailAndPassword } from '@firebase/auth';;
+import { createUserWithEmailAndPassword } from '@firebase/auth';
 import { collection, addDoc } from "firebase/firestore";
-import { db, auth } from "../config"
+import { db, auth } from "../config";
 
 interface Errors {
 	name?: string;
@@ -70,7 +70,7 @@ const Signup = ({ navigation }: { navigation: any }) => {
 				email: email,
 			})
 			console.log('User registered email:', userCredential.user.email, docRef.id);
-			navigation.navigate('login');
+			navigation.navigate('characters');
 		} catch (error) {
 			console.error('Error registering user:', error);
 		}

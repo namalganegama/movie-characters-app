@@ -3,13 +3,22 @@ import {
     View, TextInput, TouchableOpacity,
     Text, StyleSheet
 } from 'react-native';
+import { signInWithEmailAndPassword } from '@firebase/auth';
+import { auth } from "../config";
 
-const Login = () => {
+const Login = ({ navigation }: { navigation: any }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
     const handleSubmit = () => {
-        console.log('Login Sucessful');
+        signInWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
+                console.log(userCredential.user.email +' Login Successful');
+                navigation.navigate('characters');
+            })
+            .catch((error) => {
+                console.error('Login Failed', error);
+            });
     }
 
     return (
