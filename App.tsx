@@ -3,17 +3,23 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import signUpScreen from './screens/Signup';
 import loginScreen from './screens/Login';
+import charactersScreen from './screens/Characters';
+import { Provider } from 'react-redux';
+import store from './store/store';
 
 const Stack = createStackNavigator();
 
 export default function App() {
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="signup">
-        <Stack.Screen name="signUp" component={signUpScreen} options={{ headerShown: false }} />
-        <Stack.Screen name="login" component={loginScreen} options={{ headerShown: false }} />
+    <Provider store={store}>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName="signup">
+          <Stack.Screen name="signUp" component={signUpScreen} options={{ headerShown: false }} />
+          <Stack.Screen name="login" component={loginScreen} options={{ headerShown: false }} />
+          <Stack.Screen name="characters" component={charactersScreen} options={{ headerShown: false }} />
 
-      </Stack.Navigator>
-    </NavigationContainer>
+        </Stack.Navigator>
+      </NavigationContainer>
+    </Provider>
   );
 }
