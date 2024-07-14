@@ -4,7 +4,7 @@ import {
 	Text, StyleSheet
 } from 'react-native';
 import { createUserWithEmailAndPassword } from '@firebase/auth';
-import { collection, addDoc } from "firebase/firestore";
+import { setDoc, doc } from "firebase/firestore";
 import { db, auth } from "../config";
 
 interface Errors {
@@ -62,14 +62,15 @@ const Signup = ({ navigation }: { navigation: any }) => {
 	};
 
 	const handleAuthentication = async () => {
-		
 		try {
 			const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-			const docRef = await addDoc(collection(db, "users"), {
+			const user = userCredential.user;
+
+			await setDoc(doc(db, "users", user.uid), {
 				name: name,
 				email: email,
-			})
-			console.log('User registered email:', userCredential.user.email, docRef.id);
+			});
+			console.log('User registered with email:', user.email);
 			navigation.navigate('characters');
 		} catch (error) {
 			console.error('Error registering user:', error);

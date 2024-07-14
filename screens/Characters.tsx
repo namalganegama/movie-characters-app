@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, TouchableOpacity, Image, ActivityIndicator, Fla
 import { useDispatch } from 'react-redux';
 import { getCharacter } from '../store/reducers/characterSlice';
 import { useEffect, useState } from 'react';
+import React from 'react';
 
 interface Character {
   id: string;
@@ -15,7 +16,7 @@ interface Character {
   image: string;
 }
 
-const Characters = () => {
+const Characters = ({ navigation }: { navigation: any }) => {
   const [selectedItem, setSelectedItem] = useState<Character | null>(null);
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState([]);
@@ -52,12 +53,18 @@ const Characters = () => {
       {loading ? (
         <ActivityIndicator size="large" color="#FFD482" />
       ) : (
-        <FlatList
-          style={styles.flatList}
-          data={data}
-          renderItem={renderItem}
-          keyExtractor={(item) => item.id}
-        />
+        <React.Fragment>
+         <TouchableOpacity onPress={() => navigation.navigate('profile')} style={styles.wheelStyle}>
+           <Image source={require('../assets/cogwheel.png')} style={styles.wheelImage} />
+         </TouchableOpacity>
+          
+          <FlatList
+            style={styles.flatList}
+            data={data}
+            renderItem={renderItem}
+            keyExtractor={(item) => item.id}
+          />
+        </React.Fragment>
       )}
 
       {selectedItem && (
@@ -90,7 +97,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#2A2A2A',
   },
   flatList: {
-    marginTop: 50
+    marginTop: 100
   },
   itemContainer: {
     flexDirection: 'row',
@@ -170,6 +177,18 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  wheelImage: { 
+    height: 40, 
+    width: 40, 
+    tintColor: '#FFF' 
+  },
+  wheelStyle: {
+    position: 'absolute',
+    top: 50,
+    right: 30,
+    tintColor: '#FFF',
+    zIndex: 10,
   },
 });
 

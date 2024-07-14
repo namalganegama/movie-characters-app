@@ -50,6 +50,14 @@ const Login = ({ navigation }: { navigation: any }) => {
             >
                 <Text style={styles.buttonText}>Sign In</Text>
             </TouchableOpacity>
+
+            <Text style={styles.bottomText}>
+				Don't have an account?
+				&nbsp;
+				<Text style={{ color: '#FFD482' }} onPress={() => navigation.navigate('signUp')}>
+					Sign Up
+				</Text>
+			</Text>
         </View>
     );
 };
@@ -98,6 +106,14 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 20,
     },
+    bottomText: {
+		color: '#FFFFFF',
+		fontSize: 15,
+		fontWeight: 'bold',
+		marginTop: 78,
+		marginBottom: 12,
+		textAlign: 'center',
+	},
 });
 
 export default Login;
